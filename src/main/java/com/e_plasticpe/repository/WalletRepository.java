@@ -57,16 +57,16 @@ public interface WalletRepository extends JpaRepository<Wallet, Long> {
 //	@Query(value = "SELECT * FROM Wallet WHERE user_id = :userId AND created_at >= DATE_SUB(NOW(), INTERVAL 1 YEAR)", nativeQuery = true)
 //	List<Wallet> getReportByUserIdLastYear(Long userId);
 	
-	@Query(value = "SELECT vendor_id, SUM(balance) as totalBalance FROM Wallet WHERE vendor_id = :vendorId AND created_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR) GROUP BY vendor_id", nativeQuery = true)
+	@Query(value = "SELECT vendor_id, SUM(balance) as totalBalance FROM wallet WHERE vendor_id = :vendorId AND created_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR) GROUP BY vendor_id", nativeQuery = true)
 	Map<String, Object> getTotalBalanceByUserIdAndToday(@Param("vendorId") Long vendorId);
 
-	@Query(value = "SELECT vendor_id, SUM(balance) as totalBalance FROM Wallet WHERE vendor_id = :vendorId AND created_at >= DATE_SUB(NOW(), INTERVAL 1 WEEK) GROUP BY vendor_id", nativeQuery = true)
+	@Query(value = "SELECT vendor_id, SUM(balance) as totalBalance FROM wallet WHERE vendor_id = :vendorId AND created_at >= DATE_SUB(NOW(), INTERVAL 1 WEEK) GROUP BY vendor_id", nativeQuery = true)
 	Map<String, Object> getTotalBalanceByUserIdLastWeek(@Param("vendorId") Long vendorId);
 
-	@Query(value = "SELECT vendor_id, SUM(balance) as totalBalance FROM Wallet WHERE vendor_id = :vendorId AND created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH) GROUP BY vendor_id", nativeQuery = true)
+	@Query(value = "SELECT vendor_id, SUM(balance) as totalBalance FROM wallet WHERE vendor_id = :vendorId AND created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH) GROUP BY vendor_id", nativeQuery = true)
 	Map<String, Object> getTotalBalanceByUserIdLastMonth(@Param("vendorId") Long vendorId);
 
-	@Query(value = "SELECT vendor_id, SUM(balance) as totalBalance FROM Wallet WHERE vendor_id = :vendorId AND created_at >= DATE_SUB(NOW(), INTERVAL 1 YEAR) GROUP BY vendor_id", nativeQuery = true)
+	@Query(value = "SELECT vendor_id, SUM(balance) as totalBalance FROM wallet WHERE vendor_id = :vendorId AND created_at >= DATE_SUB(NOW(), INTERVAL 1 YEAR) GROUP BY vendor_id", nativeQuery = true)
 	Map<String, Object> getTotalBalanceByUserIdLastYear(@Param("vendorId") Long vendorId);
 	
 	@Modifying
