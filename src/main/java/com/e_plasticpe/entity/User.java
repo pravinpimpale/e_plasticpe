@@ -20,7 +20,7 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	@Column(unique = true)
-	private long phone;
+	private String phone;
 	@Column
 	private String name;
 	@Column(unique = true)
@@ -34,6 +34,8 @@ public class User {
 	@Column
 	private String role;
 	@Column
+	private String status;
+	@Column
 	@CreationTimestamp
 	private LocalDateTime  created_at;
 	@Column
@@ -42,8 +44,8 @@ public class User {
 	public User() {
 		// TODO Auto-generated constructor stub
 	}
-	public User(long id, long phone, String name, String email, String address, String landmark, int pincode,
-			String role, LocalDateTime created_at, LocalDateTime updated_at) {
+	public User(long id, String phone, String name, String email, String address, String landmark, int pincode,
+			String role, String status, LocalDateTime created_at, LocalDateTime updated_at) {
 		super();
 		this.id = id;
 		this.phone = phone;
@@ -53,6 +55,7 @@ public class User {
 		this.landmark = landmark;
 		this.pincode = pincode;
 		this.role = role;
+		this.status = status;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
 	}
@@ -62,10 +65,10 @@ public class User {
 	public void setId(long id) {
 		this.id = id;
 	}
-	public long getPhone() {
+	public String getPhone() {
 		return phone;
 	}
-	public void setPhone(long phone) {
+	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 	public String getName() {
@@ -104,6 +107,12 @@ public class User {
 	public void setRole(String role) {
 		this.role = role;
 	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	public LocalDateTime getCreated_at() {
 		return created_at;
 	}
@@ -119,9 +128,13 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", phone=" + phone + ", name=" + name + ", email=" + email + ", address=" + address
-				+ ", landmark=" + landmark + ", pincode=" + pincode + ", role=" + role + ", created_at=" + created_at
-				+ ", updated_at=" + updated_at + "]";
+				+ ", landmark=" + landmark + ", pincode=" + pincode + ", role=" + role + ", status=" + status
+				+ ", created_at=" + created_at + ", updated_at=" + updated_at + "]";
 	}
+	
+	
+	
+	
 	
 	
 	

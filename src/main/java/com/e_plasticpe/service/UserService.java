@@ -35,6 +35,7 @@ public class UserService {
 			user.setLandmark(userDetails.getLandmark());
 			user.setPincode(userDetails.getPincode());
 			user.setPhone(userDetails.getPhone());
+			user.setStatus(userDetails.getStatus());
 			user.setRole(userDetails.getRole());
 			return userRepository.save(user);
 		}

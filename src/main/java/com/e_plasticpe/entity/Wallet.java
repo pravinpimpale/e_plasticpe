@@ -14,7 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="wallet")
+@Table(name = "wallet")
 public class Wallet {
 
 	@Id
@@ -23,22 +23,26 @@ public class Wallet {
 	@Column
 	private long user_id;
 	@Column
+	private String vendor_id;
+	@Column
 	private BigDecimal balance;
 	@Column
 	@CreationTimestamp
-	private LocalDateTime  created_at;
+	private LocalDateTime created_at;
 	@Column
 	@UpdateTimestamp
 	private LocalDateTime updated_at;
-	
+
 	public Wallet() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Wallet(long id, long user_id, BigDecimal balance, LocalDateTime created_at, LocalDateTime updated_at) {
+	public Wallet(long id, long user_id, String vendor_id, BigDecimal balance, LocalDateTime created_at,
+			LocalDateTime updated_at) {
 		super();
 		Id = id;
 		this.user_id = user_id;
+		this.vendor_id = vendor_id;
 		this.balance = balance;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
@@ -58,6 +62,14 @@ public class Wallet {
 
 	public void setUser_id(long user_id) {
 		this.user_id = user_id;
+	}
+
+	public String getVendor_id() {
+		return vendor_id;
+	}
+
+	public void setVendor_id(String vendor_id) {
+		this.vendor_id = vendor_id;
 	}
 
 	public BigDecimal getBalance() {
@@ -86,13 +98,11 @@ public class Wallet {
 
 	@Override
 	public String toString() {
-		return "Wallet [Id=" + Id + ", user_id=" + user_id + ", balance=" + balance + ", created_at=" + created_at
-				+ ", updated_at=" + updated_at + "]";
+		return "Wallet [Id=" + Id + ", user_id=" + user_id + ", vendor_id=" + vendor_id + ", balance=" + balance
+				+ ", created_at=" + created_at + ", updated_at=" + updated_at + "]";
 	}
 
 	
 	
-	
-	
-	
+
 }

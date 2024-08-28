@@ -28,6 +28,7 @@ import com.e_plasticpe.entity.User;
 import com.e_plasticpe.entity.Wallet;
 import com.e_plasticpe.repository.UserRepository;
 import com.e_plasticpe.repository.WalletRepository;
+import com.e_plasticpe.service.OrderService;
 import com.e_plasticpe.service.WalletService;
 
 @RestController
@@ -36,6 +37,9 @@ public class WalletController {
 
 	@Autowired
 	private WalletService walletService;
+	
+	@Autowired
+	private OrderService orderService;
 
 	@GetMapping
 	public List<Wallet> getAllWallets() {
@@ -46,45 +50,46 @@ public class WalletController {
 
 	@GetMapping("/balances")
 	public BalancesSummary getBalancesSummary() {
-		List<Wallet> wallets = walletService.getAllWallets();
-		LocalDate today = LocalDate.now();
-		LocalDateTime now = LocalDateTime.now();
+	    List<Wallet> wallets = walletService.getAllWallets();
+	    LocalDate today = LocalDate.now();
+	    LocalDateTime now = LocalDateTime.now();
 
-		// Last week
-		LocalDateTime startOfLastWeek = now.minusWeeks(1).with(DayOfWeek.MONDAY);
-		LocalDateTime endOfLastWeek = now.minusWeeks(1).with(DayOfWeek.SUNDAY);
+	    LocalDateTime startOfLastWeek = now.minusWeeks(1).with(DayOfWeek.MONDAY).with(LocalTime.MIN);
+	    LocalDateTime endOfLastWeek = now.minusWeeks(1).with(DayOfWeek.SUNDAY).with(LocalTime.MAX);
 
-		// Last month
-		LocalDateTime startOfLastMonth = now.minusMonths(1).withDayOfMonth(1);
-		LocalDateTime endOfLastMonth = now.minusMonths(1).with(TemporalAdjusters.lastDayOfMonth());
+	    LocalDateTime startOfLastMonth = now.minusMonths(1).withDayOfMonth(1).with(LocalTime.MIN);
+	    LocalDateTime endOfLastMonth = now.minusMonths(1).with(TemporalAdjusters.lastDayOfMonth()).with(LocalTime.MAX);
 
-		// Last year
-		LocalDateTime startOfLastYear = now.minusYears(1).withDayOfYear(1);
-		LocalDateTime endOfLastYear = now.minusYears(1).with(TemporalAdjusters.lastDayOfYear());
+	    LocalDateTime startOfLastYear = now.minusYears(1).withDayOfYear(1).with(LocalTime.MIN);
+	    LocalDateTime endOfLastYear = now.minusYears(1).with(TemporalAdjusters.lastDayOfYear()).with(LocalTime.MAX);
 
-		// Last 24 hours
-		LocalDateTime startOfLast24Hours = now.minusDays(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
-		LocalDateTime endOfLast24Hours = now;
+	    LocalDateTime startOfLast24Hours = now.minusDays(1).with(LocalTime.MIN);
+	    LocalDateTime endOfLast24Hours = now;
 
-		BigDecimal todayBalance = calculateBalanceForDate(wallets, today);
-		BigDecimal lastWeekBalance = calculateBalanceForDateTimeRange(wallets, startOfLastWeek, endOfLastWeek);
-		BigDecimal lastMonthBalance = calculateBalanceForDateTimeRange(wallets, startOfLastMonth, endOfLastMonth);
-		BigDecimal lastYearBalance = calculateBalanceForDateTimeRange(wallets, startOfLastYear, endOfLastYear);
+	    BigDecimal todayBalance = calculateBalanceForDate(wallets, today);
+	    BigDecimal lastWeekBalance = calculateBalanceForDateTimeRange(wallets, startOfLastWeek, endOfLastWeek);
+	    BigDecimal lastMonthBalance = calculateBalanceForDateTimeRange(wallets, startOfLastMonth, endOfLastMonth);
+	    BigDecimal lastYearBalance = calculateBalanceForDateTimeRange(wallets, startOfLastYear, endOfLastYear);
 
-		return new BalancesSummary(todayBalance, lastWeekBalance, lastMonthBalance, lastYearBalance);
+	    return new BalancesSummary(todayBalance, lastWeekBalance, lastMonthBalance, lastYearBalance);
 	}
+
 
 	private BigDecimal calculateBalanceForDate(List<Wallet> wallets, LocalDate date) {
-		return wallets.stream().filter(wallet -> wallet.getCreated_at().toLocalDate().equals(date))
-				.map(Wallet::getBalance).reduce(BigDecimal.ZERO, BigDecimal::add);
+	    return wallets.stream()
+	        .filter(wallet -> wallet.getCreated_at().toLocalDate().equals(date))
+	        .map(Wallet::getBalance)
+	        .reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
 
-	private BigDecimal calculateBalanceForDateTimeRange(List<Wallet> wallets, LocalDateTime startDateTime,
-			LocalDateTime endDateTime) {
-		return wallets.stream().filter(wallet -> {
-			LocalDateTime walletDateTime = wallet.getCreated_at();
-			return !walletDateTime.isBefore(startDateTime) && !walletDateTime.isAfter(endDateTime);
-		}).map(Wallet::getBalance).reduce(BigDecimal.ZERO, BigDecimal::add);
+	private BigDecimal calculateBalanceForDateTimeRange(List<Wallet> wallets, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+	    return wallets.stream()
+	        .filter(wallet -> {
+	            LocalDateTime walletDateTime = wallet.getCreated_at();
+	            return !walletDateTime.isBefore(startDateTime) && !walletDateTime.isAfter(endDateTime);
+	        })
+	        .map(Wallet::getBalance)
+	        .reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
 
 	@GetMapping("/{id}")
@@ -119,5 +124,15 @@ public class WalletController {
 	@GetMapping("/user/{userId}")
 	public Map<String, List<Wallet>> getWalletsByUserId(@PathVariable(value = "userId") Long userId) {
 	    return walletService.getWalletsByUserId(userId);
+	}
+	
+	@GetMapping("/user/report/{vendorId}")
+	public Map<String, Object> getReportByUserId(@PathVariable(value = "vendorId") Long vendorId) {
+	    return walletService.getReportByUserId(vendorId);
+	}
+	
+	@GetMapping("/userWallet/{userId}")
+	public Map<String, List<Wallet>> getUserWalletsByUserId(@PathVariable(value = "userId") Long userId) {
+	    return walletService.getUserWalletsByUserId(userId);
 	}
 }
