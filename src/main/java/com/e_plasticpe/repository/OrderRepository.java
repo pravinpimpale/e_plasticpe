@@ -24,7 +24,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT o FROM Order o WHERE o.p_status ='Completed'")
 	List<Order> getAllOrdersByStatus();
     
-    @Query("SELECT o FROM Order o WHERE o.vendor_id = :userId AND o.p_status ='Completed'")
+    @Query("SELECT o FROM Order o WHERE o.user_id = :userId AND o.p_status ='Completed'")
 	List<Order> getEarningById(Long userId);
 
     @Query(value = "SELECT * FROM orders WHERE user_id = :user_id AND created_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)", nativeQuery = true)
