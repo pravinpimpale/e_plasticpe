@@ -1,4 +1,4 @@
-package com.e_plasticpe;
+package com.e_plasticpe.config;
 
 
 import org.springframework.context.annotation.Bean;
