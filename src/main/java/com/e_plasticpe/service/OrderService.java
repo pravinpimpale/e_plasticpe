@@ -68,6 +68,10 @@ public class OrderService {
 		}
 		return null;
 	}
+	
+	public List<Order> getRatingByOrderId(Long id) {
+		return orderRepository.getRatingByOrderId(id);
+	}
 
 	public void deleteOrder(Long id) {
 		orderRepository.deleteById(id);

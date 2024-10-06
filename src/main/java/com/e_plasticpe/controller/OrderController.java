@@ -104,6 +104,11 @@ public class OrderController {
 		}
 		return ResponseEntity.ok(updatedOrder);
 	}
+	
+	@GetMapping("/rating/{id}")
+	public List<Order> getRatingByUserId(@PathVariable(value = "id") Long id) {
+		return orderService.getRatingByOrderId(id);
+	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteOrder(@PathVariable(value = "id") Long id) {

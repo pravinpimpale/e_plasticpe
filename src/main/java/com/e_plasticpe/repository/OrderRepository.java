@@ -14,6 +14,9 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
 	@Query("SELECT o FROM Order o WHERE o.user_id = :userId")
 	List<Order> findByUserId(Long userId);
+	
+	@Query("SELECT o FROM Order o WHERE o.id = :id AND CAST(o.rating AS integer) > 0")
+	List<Order> getRatingByOrderId(@Param("id") Long id);
 
 	@Query("SELECT o FROM Order o WHERE o.pincode = :pincode ORDER BY o.created_at DESC")
 	List<Order> getOrdersByPincode(Long pincode);
